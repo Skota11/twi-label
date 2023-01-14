@@ -8,7 +8,7 @@ app.use(cors())
 
 app.get('/tweet/:id', (req, res) => {
   const id = req.params.id
-  const URL = `https://api.twitter.com/2/tweets?ids=${id}&tweet.fields=source`;
+  const URL = `https://api.twitter.com/1.1/statuses/show.json?id=${id}`;
   fetch(URL, {
     headers: {
       Authorization: `Bearer ${process.env.be}`
@@ -18,7 +18,8 @@ app.get('/tweet/:id', (req, res) => {
       return a.json()
     })
     .then(a => {
-      res.json({ "client": a.data[0].source })
+      const source = a.source.replace("</a>", "").split(">")[1];
+      res.json({ "client": source })
     })
 
 })
